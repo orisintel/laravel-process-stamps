@@ -4,7 +4,7 @@ namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Support\ServiceProvider;
 
-class SkeletonServiceProvider extends ServiceProvider
+class ProcessStampServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
