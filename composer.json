@@ -1,0 +1,57 @@
+{
+    "name": "orisintel/laravel-process-stamps",
+    "description": "Logs which process created or modified a record",
+    "keywords": [
+        "orisintel",
+        "laravel-process-stamps",
+        "laravel",
+        "logging"
+    ],
+    "homepage": "https://github.com/orisintel/laravel-process-stamps",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tom Schlick",
+            "email": "tschlick@orisintel.com",
+            "role": "Developer"
+        },
+        {
+            "name": "ORIS Intelligence",
+            "email": "developers@orisintel.com",
+            "homepage": "https://orisintel.com",
+            "role": "Organization"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "larapack/dd": "^1.0",
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OrisIntel\\ProcessStamps\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OrisIntel\\ProcessStamps\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OrisIntel\\ProcessStamps\\ProcessStampsServiceProvider"
+            ]
+        }
+    }
+}
