@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +23,7 @@ class ProcessStamp extends Model
      */
     public function firstOrCreateByProcess(array $process, ?string $hash) : self
     {
-        if(! $hash) {
+        if (! $hash) {
             $hash = static::makeProcessHash($process);
         }
 
@@ -37,6 +36,6 @@ class ProcessStamp extends Model
      */
     public static function makeProcessHash(array $process) : string
     {
-        return sha1($process['type'] . '-' . $process['name']);
+        return sha1($process['type'].'-'.$process['name']);
     }
 }

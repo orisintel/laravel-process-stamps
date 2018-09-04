@@ -1,11 +1,9 @@
 <?php
 
-
 namespace OrisIntel\ProcessStamps;
 
-
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait ProcessStampable
 {
@@ -70,7 +68,7 @@ trait ProcessStampable
             $type = 'file';
             $name = $_SERVER['SCRIPT_NAME'];
             if ($_SERVER['SCRIPT_NAME'] === 'artisan') {
-                $name .= ' '. implode(' ', array_slice($_SERVER['argv'], 1));
+                $name .= ' '.implode(' ', array_slice($_SERVER['argv'], 1));
             }
         } else {
             $type = 'cmd';
@@ -88,9 +86,9 @@ trait ProcessStampable
         $process = static::getProcessName();
         $hash = ProcessStamp::makeProcessHash($process);
 
-        if(config('process-stamp.cache.enabled')) {
+        if (config('process-stamp.cache.enabled')) {
             return Cache::store(config('process-stamp.cache.store'))
-                        ->forever($hash, function() use($process, $hash) {
+                        ->forever($hash, function () use ($process, $hash) {
                             return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
                         });
         } else {
