@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProcessStamp extends Model
 {
+    public $fillable = ['hash', 'name', 'type'];
+
+
+    /**
+     * Override the primary key name to use the config.
+     *
+     * @return string
+     */
+    public function getKeyName() : string
+    {
+        return config('process-stamps.columns.primary_key');
+    }
+
     /**
      * Override the table name with the one in the config file.
      *
