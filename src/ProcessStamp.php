@@ -8,7 +8,6 @@ class ProcessStamp extends Model
 {
     public $fillable = ['hash', 'name', 'type'];
 
-
     /**
      * Override the primary key name to use the config.
      *
