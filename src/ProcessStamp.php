@@ -17,8 +17,9 @@ class ProcessStamp extends Model
     }
 
     /**
-     * @param array $process
+     * @param array       $process
      * @param null|string $hash
+     *
      * @return ProcessStamp
      */
     public function firstOrCreateByProcess(array $process, ?string $hash) : self
@@ -32,6 +33,7 @@ class ProcessStamp extends Model
 
     /**
      * @param array $process
+     *
      * @return string
      */
     public static function makeProcessHash(array $process) : string

@@ -11,7 +11,7 @@ return [
 
     'cache' => [
         'enabled' => true,
-        'store' => env('PROCESS_STAMP_CACHE_DRIVER', 'redis'),
+        'store'   => env('PROCESS_STAMP_CACHE_DRIVER', 'redis'),
     ],
 
 ];
