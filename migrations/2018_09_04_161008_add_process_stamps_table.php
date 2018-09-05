@@ -16,10 +16,9 @@ class AddProcessStampsTable extends Migration
         Schema::create('process_stamps', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->string('type', 10);
+            $table->string('type', 10)->index();
             $table->text('name');
             $table->char('hash', 40)->unique();
-
             $table->timestamps();
         });
     }
