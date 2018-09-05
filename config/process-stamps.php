@@ -5,6 +5,7 @@ return [
     'table' => 'process_stamps',
 
     'columns' => [
+        'primary_key' => 'id',
         'created' => 'process_created_id',
         'updated' => 'process_updated_id',
     ],

@@ -10,7 +10,7 @@ trait ProcessStampable
     /**
      * Boots trait and adds proper hooks into the model.
      */
-    public function bootProcessStampable() : void
+    public static function bootProcessStampable() : void
     {
         static::saving(function ($model) {
             $model->{static::getProcessCreatedColumnName()} = static::getProcessId();
