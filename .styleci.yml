@@ -1,5 +1,12 @@
-preset: laravel
+php:
+  preset: recommended
 
-disabled:
-  - single_class_element_per_statement
-  - self_accessor
+  risky: false
+
+  enabled:
+  - not_operator_with_successor_space
+  - short_list_syntax
+
+  disabled:
+  - single_quote
+  - concat_without_spaces
