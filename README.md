@@ -14,9 +14,23 @@ You can install the package via composer:
 composer require orisintel/laravel-process-stamps
 ```
 
-## Usage
+## Configuration
 
 ``` php
+php artisan vendor:publish --provider="\OrisIntel\ProcessStamps\ProcessStampsServiceProvider"
+```
+
+Running the above command will publish both the migration and the config file.
+
+## Usage
+
+After adding the proper fields to your table, add the trait to your model.
+
+``` php
+// User model
+class User extends Model
+{
+    use ProcessStampable;
 
 ```
 
@@ -25,10 +39,6 @@ composer require orisintel/laravel-process-stamps
 ``` bash
 composer test
 ```
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
