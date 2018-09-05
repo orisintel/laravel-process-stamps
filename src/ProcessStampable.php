@@ -65,10 +65,12 @@ trait ProcessStampable
             $type = 'url';
             $name = $_SERVER['REQUEST_URI'];
         } elseif (isset($_SERVER['SCRIPT_NAME'])) {
-            $type = 'file';
-            $name = $_SERVER['SCRIPT_NAME'];
             if ($_SERVER['SCRIPT_NAME'] === 'artisan') {
-                $name .= ' '.implode(' ', array_slice($_SERVER['argv'], 1));
+                $type = 'artisan';
+                $name = 'artisan '.implode(' ', array_slice($_SERVER['argv'], 1));
+            } else {
+                $type = 'file';
+                $name = $_SERVER['SCRIPT_NAME'];
             }
         } else {
             $type = 'cmd';
