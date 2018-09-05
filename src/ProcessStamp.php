@@ -22,7 +22,7 @@ class ProcessStamp extends Model
      *
      * @return ProcessStamp
      */
-    public function firstOrCreateByProcess(array $process, ?string $hash) : self
+    public static function firstOrCreateByProcess(array $process, ?string $hash) : self
     {
         if (! $hash) {
             $hash = static::makeProcessHash($process);
