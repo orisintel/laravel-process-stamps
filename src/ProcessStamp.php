@@ -39,7 +39,7 @@ class ProcessStamp extends Model
         if (empty($process['type'])) {
             $process['type'] = 'other';
         }
-        
+
         if (! $hash) {
             $hash = static::makeProcessHash($process);
         }
