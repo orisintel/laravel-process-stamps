@@ -36,6 +36,10 @@ class ProcessStamp extends Model
      */
     public static function firstOrCreateByProcess(array $process, ?string $hash) : self
     {
+        if (empty($process['type'])) {
+            $process['type'] = 'other';
+        }
+        
         if (! $hash) {
             $hash = static::makeProcessHash($process);
         }
