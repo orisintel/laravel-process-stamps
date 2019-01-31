@@ -34,7 +34,7 @@ class ProcessStamp extends Model
      *
      * @return ProcessStamp
      */
-    public static function firstOrCreateByProcess(array $process, ?string $hash) : self
+    public static function firstOrCreateByProcess(array $process, ?string $hash = null) : self
     {
         if (empty($process['type'])) {
             $process['type'] = 'other';
