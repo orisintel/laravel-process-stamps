@@ -37,11 +37,11 @@ class ProcessStampsServiceProvider extends ServiceProvider
             $this->unsignedInteger($config['columns']['updated'])->nullable()->index();
 
             $this->foreign($config['columns']['created'])
-                ->references($config['columns']['id'])
+                ->references($config['columns']['primary_key'])
                 ->on($config['table']);
 
             $this->foreign($config['columns']['updated'])
-                ->references($config['columns']['id'])
+                ->references($config['columns']['primary_key'])
                 ->on($config['table']);
         });
 
