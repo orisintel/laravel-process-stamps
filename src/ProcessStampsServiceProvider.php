@@ -32,7 +32,7 @@ class ProcessStampsServiceProvider extends ServiceProvider
 
         $config = $this->app['config']->get('process-stamps');
 
-        Blueprint::macro('processIds', function() use($config) {
+        Blueprint::macro('processIds', function () use ($config) {
             $this->unsignedInteger($config['columns']['created'])->nullable()->index();
             $this->unsignedInteger($config['columns']['updated'])->nullable()->index();
 
@@ -45,7 +45,7 @@ class ProcessStampsServiceProvider extends ServiceProvider
                 ->on($config['table']);
         });
 
-        Blueprint::macro('dropProcessIds', function() use($config) {
+        Blueprint::macro('dropProcessIds', function () use ($config) {
             $this->dropColumn([
                 $config['columns']['created'],
                 $config['columns']['updated'],
