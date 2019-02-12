@@ -2,6 +2,7 @@
 
 namespace OrisIntel\ProcessStamps;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\ServiceProvider;
 
 class ProcessStampsServiceProvider extends ServiceProvider
@@ -28,5 +29,27 @@ class ProcessStampsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/process-stamps.php', 'process-stamps');
+
+        $config = $this->app['config']->get('process-stamps');
+
+        Blueprint::macro('processIds', function() use($config) {
+            $this->unsignedInteger($config['columns']['created'])->nullable()->index();
+            $this->unsignedInteger($config['columns']['updated'])->nullable()->index();
+
+            $this->foreign($config['columns']['created'])
+                ->references($config['columns']['id'])
+                ->on($config['table']);
+
+            $this->foreign($config['columns']['updated'])
+                ->references($config['columns']['id'])
+                ->on($config['table']);
+        });
+
+        Blueprint::macro('dropProcessIds', function() use($config) {
+            $this->dropColumn([
+                $config['columns']['created'],
+                $config['columns']['updated'],
+            ]);
+        });
     }
 }
