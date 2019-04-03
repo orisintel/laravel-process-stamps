@@ -53,6 +53,7 @@ class ParentTest extends TestCase
 
         $this->assertEquals('/test/hello?test=1234&another=true', $model->processCreated->name);
         $this->assertEquals('/test/hello', $model->processCreated->parent->name);
+        $this->assertEquals(1, $model->processCreated->parent->children()->count());
         $this->assertEquals('/test', $model->processCreated->parent->parent->name);
         $this->assertCount(3, ProcessStamp::all());
     }
