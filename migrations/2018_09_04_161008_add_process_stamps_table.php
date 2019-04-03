@@ -13,7 +13,7 @@ class AddProcessStampsTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_stamps', function (Blueprint $table) {
+        Schema::create(config('process-stamps.table'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('type', 10)->index();
             $table->text('name');
@@ -29,6 +29,6 @@ class AddProcessStampsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('process_stamps');
+        Schema::dropIfExists(config('process-stamps.table'));
     }
 }
