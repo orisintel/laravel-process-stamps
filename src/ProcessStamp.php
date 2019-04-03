@@ -190,7 +190,7 @@ class ProcessStamp extends Model
     public static function getParentArtisan(string $command) : ?string
     {
         $command = trim($command);
-        if(strpos($command, ' --')) {
+        if (strpos($command, ' --')) {
             return explode(' --', $command, 2)[0];
         }
 
