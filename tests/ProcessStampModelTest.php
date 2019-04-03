@@ -37,7 +37,7 @@ class ProcessStampModelTest extends TestCase
     }
 
     /** @test */
-    public function existing_process_id_entry_can_be_retreived()
+    public function existing_process_id_entry_can_be_retrieved()
     {
         $process = [
             'type' => 'artisan',
