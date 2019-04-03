@@ -4,6 +4,8 @@ namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessStamp extends Model
 {
@@ -50,7 +52,16 @@ class ProcessStamp extends Model
             $hash = static::makeProcessHash($process);
         }
 
-        return static::firstOrCreate(['hash' => $hash], $process);
+        $parent = null;
+        if(!empty($process['parent_name'])) {
+            $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
+        }
+
+        return static::firstOrCreate(['hash' => $hash], [
+            'name' => trim($process['name']),
+            'type' => $process['type'],
+            'parent_id' => optional($parent)->getKey(),
+        ]);
     }
 
     /**
@@ -60,7 +71,7 @@ class ProcessStamp extends Model
      */
     public static function makeProcessHash(array $process) : string
     {
-        return sha1($process['type'].'-'.$process['name']);
+        return sha1($process['type'] . '-' . trim($process['name']));
     }
 
     /**
@@ -71,5 +82,105 @@ class ProcessStamp extends Model
     public function parent() : ?BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Get any child processes.
+     *
+     * @return HasMany|null
+     */
+    public function children() : ?HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+
+    /**
+     * @return string
+     */
+    public static function getType() : string
+    {
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $type = 'url';
+        } elseif (isset($_SERVER['SCRIPT_NAME'])) {
+            if ($_SERVER['SCRIPT_NAME'] === 'artisan') {
+                $type = 'artisan';
+            } else {
+                $type = 'file';
+            }
+        } else {
+            $type = 'cmd';
+        }
+
+        return $type;
+    }
+
+    /**
+     * Get a readable process name and type.
+     *
+     * @param string|null $type
+     * @param string|null $raw_process
+     * @return array
+     */
+    public static function getProcessName(?string $type = null, ?string $raw_process = null) : array
+    {
+        $parent_name = null;
+        $type = $type ?? static::getType();
+
+        switch($type) {
+            case 'url':
+                $name = $raw_process ?? $_SERVER['REQUEST_URI'];
+                $parent_name = static::getParentUrl($name);
+                break;
+
+            case 'file':
+                $name = $raw_process ?? $_SERVER['SCRIPT_NAME'];
+                break;
+
+            case 'artisan':
+                $name = $raw_process ?? 'artisan '.implode(' ', array_slice($_SERVER['argv'], 1));
+                break;
+
+            case 'cmd':
+                $name = $raw_process ?? $_SERVER['argv'][0] ?? $GLOBALS['argv'][0];
+                break;
+        }
+
+        return compact('type', 'name', 'parent_name');
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCurrentProcessId() : int
+    {
+        $process = static::getProcessName();
+        $hash = ProcessStamp::makeProcessHash($process);
+
+        if (config('process-stamp.cache.enabled')) {
+            return Cache::store(config('process-stamp.cache.store'))
+                ->forever($hash, function () use ($process, $hash) {
+                    return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+                });
+        }
+
+        return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+    }
+
+    /**
+     * @param string $url
+     * @return string|null
+     */
+    public static function getParentUrl(string $url) : ?string
+    {
+        if (strpos($stripped = trim($url, '/'), '/')) {
+            $parts = preg_split( "/(\/|\?)/", $stripped);
+            if(!empty($parts) && count($parts) > 1) {
+                array_pop($parts);
+                return '/'.implode('/', $parts);
+            }
+        }
+
+        return null;
     }
 }
