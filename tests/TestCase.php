@@ -2,8 +2,8 @@
 
 namespace OrisIntel\ProcessStamps\Tests;
 
-use OrisIntel\ProcessStamps\ProcessStampsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use OrisIntel\ProcessStamps\ProcessStampsServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -35,6 +35,5 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
-
     }
 }
