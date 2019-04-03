@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProcessStamp extends Model
 {
-    public $fillable = ['hash', 'name', 'type'];
+    public $fillable = [
+        'hash',
+        'name',
+        'type',
+        'parent_id',
+    ];
 
     /**
      * Override the primary key name to use the config.
