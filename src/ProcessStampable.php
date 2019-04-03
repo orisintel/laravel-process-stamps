@@ -3,7 +3,6 @@
 namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Cache;
 
 trait ProcessStampable
 {
