@@ -27,6 +27,7 @@
         "laravel/framework": "^5.6"
     },
     "require-dev": {
+        "doctrine/dbal": "^2.9",
         "larapack/dd": "^1.0",
         "mockery/mockery": "~1.0",
         "orchestra/testbench": "^3.7",
