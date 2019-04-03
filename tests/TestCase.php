@@ -29,11 +29,4 @@ abstract class TestCase extends Orchestra
             ProcessStampsServiceProvider::class,
         ];
     }
-
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-    }
 }
