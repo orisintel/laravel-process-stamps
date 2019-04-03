@@ -35,4 +35,22 @@ class ProcessStampModelTest extends TestCase
         $this->assertEquals('artisan', $model->type);
         $this->assertEquals('db:seed', $model->name);
     }
+
+    /** @test */
+    public function existing_process_id_entry_can_be_retreived()
+    {
+        $process = [
+            'type' => 'artisan',
+            'name' => 'db:seed',
+        ];
+
+        // Insert the first one
+        $first = ProcessStamp::firstOrCreateByProcess($process);
+
+        // Hopefully retrieve it on the second
+        $second = ProcessStamp::firstOrCreateByProcess($process);
+
+        // Assert they are actually the same individual row
+        $this->assertEquals($first->getKey(), $second->getKey());
+    }
 }
