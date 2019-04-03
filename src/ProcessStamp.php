@@ -3,6 +3,7 @@
 namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProcessStamp extends Model
 {
@@ -55,5 +56,15 @@ class ProcessStamp extends Model
     public static function makeProcessHash(array $process) : string
     {
         return sha1($process['type'].'-'.$process['name']);
+    }
+
+    /**
+     * Get the parent of the command, if there is one.
+     *
+     * @return BelongsTo|null
+     */
+    public function parent() : ?BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
     }
 }
