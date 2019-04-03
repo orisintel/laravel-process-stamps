@@ -17,9 +17,7 @@ class ProcessStampsServiceProvider extends ServiceProvider
                 __DIR__.'/../config/process-stamps.php' => config_path('process-stamps.php'),
             ], 'config');
 
-            $this->publishes([
-                __DIR__ . '/../migrations' => database_path('migrations'),
-            ], 'migrations');
+            $this->loadMigrationsFrom( __DIR__ . '/../migrations');
         }
     }
 
