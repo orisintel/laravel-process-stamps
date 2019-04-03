@@ -127,6 +127,12 @@ class ProcessStamp extends Model
         $parent_name = null;
         $type = $type ?? static::getType();
 
+        /*
+         * KEEP THIS SHITTY. For now.
+         *
+         * This accesses $_SERVER directly as we can't count on the Laravel Request::server() object existing
+         * for applications with legacy code outside of the Laravel request lifecycle.
+         */
         switch ($type) {
             case 'url':
                 $name = $raw_process ?? $_SERVER['REQUEST_URI'];
