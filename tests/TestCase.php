@@ -8,7 +8,7 @@ use OrisIntel\ProcessStamps\ProcessStampsServiceProvider;
 abstract class TestCase extends Orchestra
 {
     /**
-     * SetUp
+     * SetUp.
      */
     protected function setUp() : void
     {
