@@ -93,8 +93,8 @@ trait ProcessStampable
                         ->forever($hash, function () use ($process, $hash) {
                             return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
                         });
-        } else {
-            return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
         }
+
+        return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
     }
 }
