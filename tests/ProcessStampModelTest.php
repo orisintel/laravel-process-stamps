@@ -29,15 +29,18 @@ class ProcessStampModelTest extends TestCase
             'name' => 'db:seed',
         ];
 
-        $model = ProcessStamp::firstOrCreateByProcess($process);
+        $stamp = ProcessStamp::firstOrCreateByProcess($process);
 
-        $this->assertInstanceOf(ProcessStamp::class, $model);
-        $this->assertEquals('artisan', $model->type);
-        $this->assertEquals('db:seed', $model->name);
+        $this->assertInstanceOf(ProcessStamp::class, $stamp);
+        $this->assertEquals('artisan', $stamp->type);
+        $this->assertEquals('db:seed', $stamp->name);
+        $this->assertNotNull($stamp->hash);
+        $this->assertNull($stamp->parent);
+        $this->assertTrue($stamp->children->isEmpty());
     }
 
     /** @test */
-    public function existing_process_id_entry_can_be_retreived()
+    public function existing_process_id_entry_can_be_retrieved()
     {
         $process = [
             'type' => 'artisan',

@@ -3,10 +3,18 @@
 namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessStamp extends Model
 {
-    public $fillable = ['hash', 'name', 'type'];
+    public $fillable = [
+        'hash',
+        'name',
+        'type',
+        'parent_id',
+    ];
 
     /**
      * Override the primary key name to use the config.
@@ -44,7 +52,16 @@ class ProcessStamp extends Model
             $hash = static::makeProcessHash($process);
         }
 
-        return static::firstOrCreate(['hash' => $hash], $process);
+        $parent = null;
+        if (! empty($process['parent_name'])) {
+            $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
+        }
+
+        return static::firstOrCreate(['hash' => $hash], [
+            'name'      => trim($process['name']),
+            'type'      => $process['type'],
+            'parent_id' => optional($parent)->getKey(),
+        ]);
     }
 
     /**
@@ -54,6 +71,135 @@ class ProcessStamp extends Model
      */
     public static function makeProcessHash(array $process) : string
     {
-        return sha1($process['type'].'-'.$process['name']);
+        return sha1($process['type'] . '-' . trim($process['name']));
+    }
+
+    /**
+     * Get the parent of the command, if there is one.
+     *
+     * @return BelongsTo|null
+     */
+    public function parent() : ?BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Get any child processes.
+     *
+     * @return HasMany|null
+     */
+    public function children() : ?HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getType() : string
+    {
+        if (isset($_SERVER['REQUEST_URI'])) {
+            return 'url';
+        }
+
+        if (app()->runningInConsole()) {
+            return 'artisan';
+        }
+
+        if (isset($_SERVER['SCRIPT_NAME'])) {
+            return 'file';
+        }
+
+        return 'cmd';
+    }
+
+    /**
+     * Get a readable process name and type.
+     *
+     * @param string|null $type
+     * @param string|null $raw_process
+     *
+     * @return array
+     */
+    public static function getProcessName(?string $type = null, ?string $raw_process = null) : array
+    {
+        $parent_name = null;
+        $type = $type ?? static::getType();
+
+        /*
+         * KEEP THIS SHITTY. For now.
+         *
+         * This accesses $_SERVER directly as we can't count on the Laravel Request::server() object existing
+         * for applications with legacy code outside of the Laravel request lifecycle.
+         */
+        switch ($type) {
+            case 'url':
+                $name = $raw_process ?? $_SERVER['REQUEST_URI'];
+                $parent_name = static::getParentUrl($name);
+                break;
+
+            case 'artisan':
+                $name = 'artisan ' . ($raw_process ?? implode(' ', array_slice($_SERVER['argv'], 1)));
+                $parent_name = static::getParentArtisan($name);
+                break;
+
+            case 'file':
+                $name = $raw_process ?? $_SERVER['SCRIPT_NAME'];
+                break;
+
+            case 'cmd':
+                $name = $raw_process ?? $_SERVER['argv'][0] ?? $GLOBALS['argv'][0];
+                break;
+        }
+
+        return compact('type', 'name', 'parent_name');
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCurrentProcessId() : int
+    {
+        $process = static::getProcessName();
+        $hash = ProcessStamp::makeProcessHash($process);
+
+        if (config('process-stamp.cache.enabled')) {
+            return Cache::store(config('process-stamp.cache.store'))
+                ->forever($hash, function () use ($process, $hash) {
+                    return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+                });
+        }
+
+        return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string|null
+     */
+    public static function getParentUrl(string $url) : ?string
+    {
+        if (strpos($stripped = trim($url, '/'), '/')) {
+            $parts = preg_split("/(\/|\?)/", $stripped);
+            if (! empty($parts) && count($parts) > 1) {
+                array_pop($parts);
+
+                return '/'.implode('/', $parts);
+            }
+        }
+
+        return null;
+    }
+
+    public static function getParentArtisan(string $command) : ?string
+    {
+        $command = trim($command);
+        if (strpos($command, ' --')) {
+            return explode(' --', $command, 2)[0];
+        }
+
+        return null;
     }
 }
