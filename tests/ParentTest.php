@@ -45,6 +45,8 @@ class ParentTest extends TestCase
     /** @test */
     public function saved_model_includes_parent()
     {
+        $this->assertCount(0, ProcessStamp::all());
+
         // Set the url so process stamps can detect it
         $_SERVER['REQUEST_URI'] = '/test/hello?test=1234&another=true';
         $model = $this->createPost();
@@ -52,5 +54,32 @@ class ParentTest extends TestCase
         $this->assertEquals('/test/hello?test=1234&another=true', $model->processCreated->name);
         $this->assertEquals('/test/hello', $model->processCreated->parent->name);
         $this->assertEquals('/test', $model->processCreated->parent->parent->name);
+        $this->assertCount(3, ProcessStamp::all());
+    }
+
+    /** @test */
+    public function artisan_simple()
+    {
+        $process = ProcessStamp::getProcessName('artisan', 'test:sync');
+
+        $this->assertEquals('artisan test:sync', $process['name']);
+    }
+
+    /** @test */
+    public function artisan_with_flags()
+    {
+        $process = ProcessStamp::getProcessName('artisan', 'test:sync --help');
+
+        $this->assertEquals('artisan test:sync --help', $process['name']);
+        $this->assertEquals('artisan test:sync', $process['parent_name']);
+    }
+
+    /** @test */
+    public function artisan_with_options()
+    {
+        $process = ProcessStamp::getProcessName('artisan', 'test:sync --url_id=12345 --limit=4');
+
+        $this->assertEquals('artisan test:sync --url_id=12345 --limit=4', $process['name']);
+        $this->assertEquals('artisan test:sync', $process['parent_name']);
     }
 }

@@ -101,18 +101,18 @@ class ProcessStamp extends Model
     public static function getType() : string
     {
         if (isset($_SERVER['REQUEST_URI'])) {
-            $type = 'url';
-        } elseif (isset($_SERVER['SCRIPT_NAME'])) {
-            if ($_SERVER['SCRIPT_NAME'] === 'artisan') {
-                $type = 'artisan';
-            } else {
-                $type = 'file';
-            }
-        } else {
-            $type = 'cmd';
+            return 'url';
         }
 
-        return $type;
+        if (app()->runningInConsole()) {
+            return 'artisan';
+        }
+
+        if (isset($_SERVER['SCRIPT_NAME'])) {
+            return 'file';
+        }
+
+        return 'cmd';
     }
 
     /**
@@ -133,12 +133,13 @@ class ProcessStamp extends Model
                 $parent_name = static::getParentUrl($name);
                 break;
 
-            case 'file':
-                $name = $raw_process ?? $_SERVER['SCRIPT_NAME'];
+            case 'artisan':
+                $name = 'artisan ' . ($raw_process ?? implode(' ', array_slice($_SERVER['argv'], 1)));
+                $parent_name = static::getParentArtisan($name);
                 break;
 
-            case 'artisan':
-                $name = $raw_process ?? 'artisan '.implode(' ', array_slice($_SERVER['argv'], 1));
+            case 'file':
+                $name = $raw_process ?? $_SERVER['SCRIPT_NAME'];
                 break;
 
             case 'cmd':
@@ -179,6 +180,16 @@ class ProcessStamp extends Model
                 array_pop($parts);
                 return '/'.implode('/', $parts);
             }
+        }
+
+        return null;
+    }
+
+    public static function getParentArtisan(string $command) : ?string
+    {
+        $command = trim($command);
+        if(strpos($command, ' --')) {
+            return explode(' --', $command, 2)[0];
         }
 
         return null;
