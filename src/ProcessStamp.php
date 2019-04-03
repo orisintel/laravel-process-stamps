@@ -53,13 +53,13 @@ class ProcessStamp extends Model
         }
 
         $parent = null;
-        if(!empty($process['parent_name'])) {
+        if (! empty($process['parent_name'])) {
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
 
         return static::firstOrCreate(['hash' => $hash], [
-            'name' => trim($process['name']),
-            'type' => $process['type'],
+            'name'      => trim($process['name']),
+            'type'      => $process['type'],
             'parent_id' => optional($parent)->getKey(),
         ]);
     }
@@ -94,7 +94,6 @@ class ProcessStamp extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
-
     /**
      * @return string
      */
@@ -120,6 +119,7 @@ class ProcessStamp extends Model
      *
      * @param string|null $type
      * @param string|null $raw_process
+     *
      * @return array
      */
     public static function getProcessName(?string $type = null, ?string $raw_process = null) : array
@@ -127,7 +127,7 @@ class ProcessStamp extends Model
         $parent_name = null;
         $type = $type ?? static::getType();
 
-        switch($type) {
+        switch ($type) {
             case 'url':
                 $name = $raw_process ?? $_SERVER['REQUEST_URI'];
                 $parent_name = static::getParentUrl($name);
@@ -170,14 +170,16 @@ class ProcessStamp extends Model
 
     /**
      * @param string $url
+     *
      * @return string|null
      */
     public static function getParentUrl(string $url) : ?string
     {
         if (strpos($stripped = trim($url, '/'), '/')) {
-            $parts = preg_split( "/(\/|\?)/", $stripped);
-            if(!empty($parts) && count($parts) > 1) {
+            $parts = preg_split("/(\/|\?)/", $stripped);
+            if (! empty($parts) && count($parts) > 1) {
                 array_pop($parts);
+
                 return '/'.implode('/', $parts);
             }
         }
