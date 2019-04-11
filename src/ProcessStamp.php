@@ -140,7 +140,7 @@ class ProcessStamp extends Model
                 break;
 
             case 'artisan':
-                $name = 'artisan ' . ($raw_process ?? implode(' ', array_slice($_SERVER['argv'], 1)));
+                $name = ($raw_process ?? implode(' ', array_slice($_SERVER['argv'], 1)));
                 $parent_name = static::getParentArtisan($name);
                 break;
 

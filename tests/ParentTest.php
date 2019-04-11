@@ -63,7 +63,7 @@ class ParentTest extends TestCase
     {
         $process = ProcessStamp::getProcessName('artisan', 'test:sync');
 
-        $this->assertEquals('artisan test:sync', $process['name']);
+        $this->assertEquals('test:sync', $process['name']);
     }
 
     /** @test */
@@ -71,8 +71,8 @@ class ParentTest extends TestCase
     {
         $process = ProcessStamp::getProcessName('artisan', 'test:sync --help');
 
-        $this->assertEquals('artisan test:sync --help', $process['name']);
-        $this->assertEquals('artisan test:sync', $process['parent_name']);
+        $this->assertEquals('test:sync --help', $process['name']);
+        $this->assertEquals('test:sync', $process['parent_name']);
     }
 
     /** @test */
@@ -80,7 +80,16 @@ class ParentTest extends TestCase
     {
         $process = ProcessStamp::getProcessName('artisan', 'test:sync --url_id=12345 --limit=4');
 
-        $this->assertEquals('artisan test:sync --url_id=12345 --limit=4', $process['name']);
-        $this->assertEquals('artisan test:sync', $process['parent_name']);
+        $this->assertEquals('test:sync --url_id=12345 --limit=4', $process['name']);
+        $this->assertEquals('test:sync', $process['parent_name']);
+    }
+
+    /** @test */
+    public function make_sure_artisan_does_not_duplicate()
+    {
+        $process = ProcessStamp::getProcessName('artisan', 'violation:audit --no-rollbar');
+
+        $this->assertEquals('violation:audit --no-rollbar', $process['name']);
+        $this->assertEquals('violation:audit', $process['parent_name']);
     }
 }
