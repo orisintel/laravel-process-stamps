@@ -14,7 +14,7 @@ class AddParentIdToTable extends Migration
     public function up()
     {
         Schema::table(config('process-stamps.table'), function (Blueprint $table) {
-            if(! Schema::hasColumn(config('process-stamps.table'), 'parent_id')) {
+            if (! Schema::hasColumn(config('process-stamps.table'), 'parent_id')) {
                 $table->unsignedInteger('parent_id')->nullable()->index()->after('hash');
 
                 $table->foreign('parent_id')
