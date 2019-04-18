@@ -14,11 +14,13 @@ class AddParentIdToTable extends Migration
     public function up()
     {
         Schema::table(config('process-stamps.table'), function (Blueprint $table) {
-            $table->unsignedInteger('parent_id')->nullable()->index()->after('hash');
+            if(! Schema::hasColumn(config('process-stamps.table'), 'parent_id')) {
+                $table->unsignedInteger('parent_id')->nullable()->index()->after('hash');
 
-            $table->foreign('parent_id')
-                ->references(config('process-stamps.columns.primary_key'))
-                ->on(config('process-stamps.table'));
+                $table->foreign('parent_id')
+                    ->references(config('process-stamps.columns.primary_key'))
+                    ->on(config('process-stamps.table'));
+            }
         });
     }
 
