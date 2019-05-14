@@ -34,6 +34,14 @@ class User extends Model
 
 ```
 
+Next, create a migration for your table and include the following:
+
+```php
+$table->processIds();
+```
+
+That will generate the nessesary field names to track processes.
+
 ### Testing
 
 ``` bash
