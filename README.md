@@ -54,7 +54,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email [tschlick@orisintel.com](mailto:tschlick@orisintel.com) instead of using the issue tracker.
+If you discover any security related issues, please email [opensource@orisintel.com](mailto:opensource@orisintel.com) instead of using the issue tracker.
 
 ## Credits
 
