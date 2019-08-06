@@ -3,6 +3,7 @@
 namespace OrisIntel\ProcessStamps;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
 class ProcessStampsServiceProvider extends ServiceProvider
@@ -30,15 +31,20 @@ class ProcessStampsServiceProvider extends ServiceProvider
 
         $config = $this->app['config']->get('process-stamps');
 
-        Blueprint::macro('processIds', function () use ($config) {
-            $this->unsignedInteger($config['columns']['created'])->nullable()->index();
-            $this->unsignedInteger($config['columns']['updated'])->nullable()->index();
+        Blueprint::macro('processIds', function (?array $params = []) use ($config) {
+            $this->unsignedInteger($config['columns']['created'])
+                ->nullable()
+                ->index(Arr::get($params, 'created_index_name'));
 
-            $this->foreign($config['columns']['created'])
+            $this->unsignedInteger($config['columns']['updated'])
+                ->nullable()
+                ->index(Arr::get($params, 'updated_index_name'));
+
+            $this->foreign($config['columns']['created'], Arr::get($params, 'created_foreign_key_name'))
                 ->references($config['columns']['primary_key'])
                 ->on($config['table']);
 
-            $this->foreign($config['columns']['updated'])
+            $this->foreign($config['columns']['updated'], Arr::get($params, 'updated_foreign_key_name'))
                 ->references($config['columns']['primary_key'])
                 ->on($config['table']);
         });

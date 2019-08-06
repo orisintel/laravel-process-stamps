@@ -40,6 +40,17 @@ Next, create a migration for your table and include the following:
 $table->processIds();
 ```
 
+To specify your own foreign key or index names, include the following options:
+
+```php
+$table->processIds([
+    'created_index_name' => 'custom_created_index_name',
+    'updated_index_name' => 'custom_updated_index_name',
+    'created_foreign_key_name' => 'custom_created_foreign_key_name',
+    'updated_foreign_key_name' => 'custom_updated_foreign_key_name',
+    ]);
+```
+
 That will generate the nessesary field names to track processes.
 
 ### Testing
