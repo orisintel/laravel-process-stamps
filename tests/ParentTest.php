@@ -10,7 +10,7 @@ class ParentTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected function createPost() : Post
+    protected function createPost(): Post
     {
         return Post::create(['name' => 'Test 123']);
     }
