@@ -9,7 +9,7 @@ trait ProcessStampable
     /**
      * Boots trait and adds proper hooks into the model.
      */
-    public static function bootProcessStampable() : void
+    public static function bootProcessStampable(): void
     {
         static::creating(function ($model) {
             $model->{static::getProcessCreatedColumnName()} = ProcessStamp::getCurrentProcessId();
@@ -24,7 +24,7 @@ trait ProcessStampable
     /**
      * @return string
      */
-    protected static function getProcessCreatedColumnName() : string
+    protected static function getProcessCreatedColumnName(): string
     {
         return config('process-stamps.columns.created');
     }
@@ -32,7 +32,7 @@ trait ProcessStampable
     /**
      * @return string
      */
-    protected static function getProcessUpdatedColumnName() : string
+    protected static function getProcessUpdatedColumnName(): string
     {
         return config('process-stamps.columns.updated');
     }
@@ -40,7 +40,7 @@ trait ProcessStampable
     /**
      * @return BelongsTo|null
      */
-    public function processCreated() : ?BelongsTo
+    public function processCreated(): ?BelongsTo
     {
         return $this->belongsTo(ProcessStamp::class, static::getProcessCreatedColumnName());
     }
@@ -48,7 +48,7 @@ trait ProcessStampable
     /**
      * @return BelongsTo|null
      */
-    public function processUpdated() : ?BelongsTo
+    public function processUpdated(): ?BelongsTo
     {
         return $this->belongsTo(ProcessStamp::class, static::getProcessUpdatedColumnName());
     }
