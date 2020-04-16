@@ -1,7 +1,7 @@
 # Laravel Process Stamps
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orisintel/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/orisintel/laravel-process-stamps)
-[![Build Status](https://img.shields.io/travis/orisintel/laravel-process-stamps/master.svg?style=flat-square)](https://travis-ci.org/orisintel/laravel-process-stamps)
+[![Build Status](https://img.shields.io/github/workflow/status/orisintel/laravel-process-stamps/tests?style=flat-square)](https://github.com/orisintel/laravel-process-stamps/actions?query=workflow%3Atests)
 [![Total Downloads](https://img.shields.io/packagist/dt/orisintel/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/orisintel/laravel-process-stamps)
 
 It is sometimes very useful to know which process created or modified a particular record in your database. This package provides a trait to add to your Laravel models which automatically logs that for you.
