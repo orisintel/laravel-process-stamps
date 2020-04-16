@@ -1,11 +1,12 @@
 preset: recommended
+risky: false
+finder:
+  name: "*.php"
 
-  risky: false
-
-  enabled:
+enabled:
   - not_operator_with_successor_space
   - short_list_syntax
 
-  disabled:
+disabled:
   - single_quote
   - concat_without_spaces
