@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ProcessStamp extends Model
 {
@@ -21,7 +22,7 @@ class ProcessStamp extends Model
      *
      * @return string
      */
-    public function getKeyName(): string
+    public function getKeyName() : string
     {
         return config('process-stamps.columns.primary_key');
     }
@@ -31,7 +32,7 @@ class ProcessStamp extends Model
      *
      * @return string
      */
-    public function getTable(): string
+    public function getTable() : string
     {
         return config('process-stamps.table');
     }
@@ -42,7 +43,7 @@ class ProcessStamp extends Model
      *
      * @return ProcessStamp
      */
-    public static function firstOrCreateByProcess(array $process, ?string $hash = null): self
+    public static function firstOrCreateByProcess(array $process, ?string $hash = null) : self
     {
         if (empty($process['type'])) {
             $process['type'] = 'other';
@@ -57,11 +58,13 @@ class ProcessStamp extends Model
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
 
-        return static::firstOrCreate(['hash' => $hash], [
-            'name'      => trim($process['name']),
-            'type'      => $process['type'],
-            'parent_id' => optional($parent)->getKey(),
-        ]);
+        return DB::transaction(function () use ($hash, $process, $parent) {
+            return static::lockForUpdate()->firstOrCreate(['hash' => $hash], [
+                'name'      => trim($process['name']),
+                'type'      => $process['type'],
+                'parent_id' => optional($parent)->getKey(),
+            ]);
+        }, 5);
     }
 
     /**
@@ -69,7 +72,7 @@ class ProcessStamp extends Model
      *
      * @return string
      */
-    public static function makeProcessHash(array $process): string
+    public static function makeProcessHash(array $process) : string
     {
         return sha1($process['type'] . '-' . trim($process['name']));
     }
@@ -79,7 +82,7 @@ class ProcessStamp extends Model
      *
      * @return BelongsTo|null
      */
-    public function parent(): ?BelongsTo
+    public function parent() : ?BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
@@ -89,7 +92,7 @@ class ProcessStamp extends Model
      *
      * @return HasMany|null
      */
-    public function children(): ?HasMany
+    public function children() : ?HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
@@ -97,7 +100,7 @@ class ProcessStamp extends Model
     /**
      * @return string
      */
-    public static function getType(): string
+    public static function getType() : string
     {
         if (isset($_SERVER['REQUEST_URI'])) {
             return 'url';
@@ -122,7 +125,7 @@ class ProcessStamp extends Model
      *
      * @return array
      */
-    public static function getProcessName(?string $type = null, ?string $raw_process = null): array
+    public static function getProcessName(?string $type = null, ?string $raw_process = null) : array
     {
         $parent_name = null;
         $type = $type ?? static::getType();
@@ -159,7 +162,7 @@ class ProcessStamp extends Model
     /**
      * @return int
      */
-    public static function getCurrentProcessId(): int
+    public static function getCurrentProcessId() : int
     {
         $process = static::getProcessName();
         $hash = ProcessStamp::makeProcessHash($process);
@@ -179,7 +182,7 @@ class ProcessStamp extends Model
      *
      * @return string|null
      */
-    public static function getParentUrl(string $url): ?string
+    public static function getParentUrl(string $url) : ?string
     {
         if (strpos($stripped = trim($url, '/'), '/')) {
             $parts = preg_split("/(\/|\?)/", $stripped);
@@ -193,7 +196,7 @@ class ProcessStamp extends Model
         return null;
     }
 
-    public static function getParentArtisan(string $command): ?string
+    public static function getParentArtisan(string $command) : ?string
     {
         $command = trim($command);
         if (strpos($command, ' --')) {
