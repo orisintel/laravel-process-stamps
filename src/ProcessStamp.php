@@ -58,13 +58,11 @@ class ProcessStamp extends Model
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
 
-        return DB::transaction(function () use ($hash, $process, $parent) {
-            return static::lockForUpdate()->firstOrCreate(['hash' => $hash], [
-                'name'      => trim($process['name']),
-                'type'      => $process['type'],
-                'parent_id' => optional($parent)->getKey(),
-            ]);
-        }, 5);
+        return static::lockForUpdate()->firstOrCreate(['hash' => $hash], [
+            'name'      => trim($process['name']),
+            'type'      => $process['type'],
+            'parent_id' => optional($parent)->getKey(),
+        ]);
     }
 
     /**
