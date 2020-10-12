@@ -58,11 +58,23 @@ class ProcessStamp extends Model
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
 
-        return static::lockForUpdate()->firstOrCreate(['hash' => $hash], [
-            'name'      => trim($process['name']),
-            'type'      => $process['type'],
-            'parent_id' => optional($parent)->getKey(),
-        ]);
+        $stamp = static::where('hash', $hash)->first();
+
+        /*
+         * If stamp does not exist in the database yet, go ahead and obtain a lock to create it.
+         * This specifically doesn't lock as the first step to avoid all calls obtaining a lock from the cache if the item already exists in the DB.
+         */
+        if (! $stamp) {
+            Cache::lock('process-stamps-hash-create-' . $hash, 10)->get(function() use (&$stamp, $hash, $process, $parent) {
+                $stamp = static::firstOrCreate(['hash' => $hash], [
+                    'name'      => trim($process['name']),
+                    'type'      => $process['type'],
+                    'parent_id' => optional($parent)->getKey(),
+                ]);
+            });
+        }
+
+        return $stamp;
     }
 
     /**
