@@ -17,7 +17,7 @@ jobs:
           with:
               commit_message: Automatic application of php-cs-fixer changes
     tests:
-        needs:.php_cs
+        needs:
             - php-cs-fixer
         runs-on: ubuntu-latest
         strategy:
