@@ -15,7 +15,7 @@ class ProcessStampsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/process-stamps.php' => config_path('process-stamps.php'),
+                __DIR__ . '/../config/process-stamps.php' => config_path('process-stamps.php'),
             ], 'config');
 
             $this->loadMigrationsFrom(__DIR__ . '/../migrations');
@@ -27,7 +27,7 @@ class ProcessStampsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/process-stamps.php', 'process-stamps');
+        $this->mergeConfigFrom(__DIR__ . '/../config/process-stamps.php', 'process-stamps');
 
         $config = $this->app['config']->get('process-stamps');
 
