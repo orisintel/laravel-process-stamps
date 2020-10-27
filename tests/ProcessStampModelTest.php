@@ -56,4 +56,27 @@ class ProcessStampModelTest extends TestCase
         // Assert they are actually the same individual row
         $this->assertEquals($first->getKey(), $second->getKey());
     }
+
+    /** @test */
+    public function different_hash_by_type()
+    {
+        $types = [
+            'artisan',
+            'url',
+            'file',
+            'cmd',
+        ];
+
+        $process_hashes = [];
+
+        foreach ($types AS $type) {
+            $input_array = [
+                'type' => $type,
+                'name' => 'delete.php',
+            ];
+            $process = ProcessStamp::firstOrCreateByProcess($input_array);
+            $this->assertFalse(in_array($process->hash, $process_hashes));
+            $process_hashes[] = $process->hash;
+        }
+    }
 }
