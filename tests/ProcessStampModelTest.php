@@ -69,7 +69,7 @@ class ProcessStampModelTest extends TestCase
 
         $process_hashes = [];
 
-        foreach ($types AS $type) {
+        foreach ($types as $type) {
             $input_array = [
                 'type' => $type,
                 'name' => 'delete.php',

@@ -54,6 +54,7 @@ class ProcessStamp extends Model
         }
 
         $parent = null;
+
         if (! empty($process['parent_name'])) {
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
@@ -65,7 +66,7 @@ class ProcessStamp extends Model
          * This specifically doesn't lock as the first step to avoid all calls obtaining a lock from the cache if the item already exists in the DB.
          */
         if (! $stamp) {
-            Cache::lock('process-stamps-hash-create-' . $hash, 10)->get(function() use (&$stamp, $hash, $process, $parent) {
+            Cache::lock('process-stamps-hash-create-' . $hash, 10)->get(function () use (&$stamp, $hash, $process, $parent) {
                 $stamp = static::firstOrCreate(['hash' => $hash], [
                     'name'      => trim($process['name']),
                     'type'      => $process['type'],
@@ -175,16 +176,16 @@ class ProcessStamp extends Model
     public static function getCurrentProcessId() : int
     {
         $process = static::getProcessName();
-        $hash = ProcessStamp::makeProcessHash($process);
+        $hash = self::makeProcessHash($process);
 
         if (config('process-stamp.cache.enabled')) {
             return Cache::store(config('process-stamp.cache.store'))
                 ->forever($hash, function () use ($process, $hash) {
-                    return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+                    return self::firstOrCreateByProcess($process, $hash)->getKey();
                 });
         }
 
-        return ProcessStamp::firstOrCreateByProcess($process, $hash)->getKey();
+        return self::firstOrCreateByProcess($process, $hash)->getKey();
     }
 
     /**
@@ -196,10 +197,11 @@ class ProcessStamp extends Model
     {
         if (strpos($stripped = trim($url, '/'), '/')) {
             $parts = preg_split("/(\/|\?)/", $stripped);
+
             if (! empty($parts) && count($parts) > 1) {
                 array_pop($parts);
 
-                return '/'.implode('/', $parts);
+                return '/' . implode('/', $parts);
             }
         }
 
@@ -209,6 +211,7 @@ class ProcessStamp extends Model
     public static function getParentArtisan(string $command) : ?string
     {
         $command = trim($command);
+
         if (strpos($command, ' --')) {
             return explode(' --', $command, 2)[0];
         }
