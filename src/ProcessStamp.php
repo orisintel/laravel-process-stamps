@@ -55,7 +55,7 @@ class ProcessStamp extends Model
 
         $parent = null;
 
-        if (! empty($process['parent_name'])) {
+        if (config('process-stamps.resolve_recursive') && ! empty($process['parent_name'])) {
             $parent = static::firstOrCreateByProcess(static::getProcessName($process['type'], $process['parent_name']));
         }
 
