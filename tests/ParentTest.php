@@ -59,6 +59,22 @@ class ParentTest extends TestCase
     }
 
     /** @test */
+    public function saved_model_with_resolve_recursive_disabled_does_not_generate_parent()
+    {
+        config()->set('process-stamps.resolve_recursive', false);
+
+        $this->assertCount(0, ProcessStamp::all());
+
+        // Set the url so process stamps can detect it
+        $_SERVER['REQUEST_URI'] = '/test/hello?test=1234&another=true';
+        $model = $this->createPost();
+
+        $this->assertEquals('/test/hello?test=1234&another=true', $model->processCreated->name);
+        $this->assertNull($model->processCreated->parent);
+        $this->assertCount(1, ProcessStamp::all());
+    }
+
+    /** @test */
     public function artisan_simple()
     {
         $process = ProcessStamp::getProcessName('artisan', 'test:sync');
