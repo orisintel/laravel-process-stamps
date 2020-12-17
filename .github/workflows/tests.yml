@@ -17,8 +17,8 @@ jobs:
 #           with:
 #               commit_message: Automatic application of php-cs-fixer changes
     tests:
-        needs:
-            - styling
+#         needs:
+#             - styling
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true
