@@ -14,4 +14,6 @@ return [
         'enabled' => env('PROCESS_STAMP_CACHE_ENABLED', true),
         'store'   => env('PROCESS_STAMP_CACHE_DRIVER', 'redis'),
     ],
+
+    'resolve_recursive' => env('PROCESS_STAMP_RESOLVE_RECURSIVE', true),
 ];
