@@ -1,9 +1,9 @@
 <?php
 
-namespace OrisIntel\ProcessStamps\Tests\Fakes;
+namespace AlwaysOpen\ProcessStamps\Tests\Fakes;
 
 use Illuminate\Database\Eloquent\Model;
-use OrisIntel\ProcessStamps\ProcessStampable;
+use AlwaysOpen\ProcessStamps\ProcessStampable;
 
 class Post extends Model
 {

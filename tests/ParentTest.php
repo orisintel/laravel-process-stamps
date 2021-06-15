@@ -1,10 +1,10 @@
 <?php
 
-namespace OrisIntel\ProcessStamps\Tests;
+namespace AlwaysOpen\ProcessStamps\Tests;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use OrisIntel\ProcessStamps\ProcessStamp;
-use OrisIntel\ProcessStamps\Tests\Fakes\Post;
+use AlwaysOpen\ProcessStamps\ProcessStamp;
+use AlwaysOpen\ProcessStamps\Tests\Fakes\Post;
 
 class ParentTest extends TestCase
 {
