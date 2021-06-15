@@ -1,6 +1,6 @@
 <?php
 
-namespace OrisIntel\ProcessStamps;
+namespace AlwaysOpen\ProcessStamps;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

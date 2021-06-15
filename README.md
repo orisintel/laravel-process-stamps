@@ -1,8 +1,8 @@
 # Laravel Process Stamps
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/orisintel/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/orisintel/laravel-process-stamps)
-[![Build Status](https://img.shields.io/github/workflow/status/orisintel/laravel-process-stamps/tests?style=flat-square)](https://github.com/orisintel/laravel-process-stamps/actions?query=workflow%3Atests)
-[![Total Downloads](https://img.shields.io/packagist/dt/orisintel/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/orisintel/laravel-process-stamps)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/always-open/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/always-open/laravel-process-stamps)
+[![Build Status](https://img.shields.io/github/workflow/status/always-open/laravel-process-stamps/tests?style=flat-square)](https://github.com/always-open/laravel-process-stamps/actions?query=workflow%3Atests)
+[![Total Downloads](https://img.shields.io/packagist/dt/always-open/laravel-process-stamps.svg?style=flat-square)](https://packagist.org/packages/always-open/laravel-process-stamps)
 
 It is sometimes very useful to know which process created or modified a particular record in your database. This package provides a trait to add to your Laravel models which automatically logs that for you.
 
@@ -11,13 +11,13 @@ It is sometimes very useful to know which process created or modified a particul
 You can install the package via composer:
 
 ```bash
-composer require orisintel/laravel-process-stamps
+composer require always-open/laravel-process-stamps
 ```
 
 ## Configuration
 
 ``` php
-php artisan vendor:publish --provider="\OrisIntel\ProcessStamps\ProcessStampsServiceProvider"
+php artisan vendor:publish --provider="\AlwaysOpen\ProcessStamps\ProcessStampsServiceProvider"
 ```
 
 Running the above command will publish both the migration and the config file.
@@ -59,13 +59,32 @@ That will generate the nessesary field names to track processes.
 composer test
 ```
 
+## Using Docker
+All assets are set up under the docker-compose.yml file. The first time you run the docker image you must build it with 
+the following command:
+```bash
+docker-compose build
+```
+
+Then you can bring it up in the background using:
+```bash
+docker-compose up -d
+```
+
+And the image is aliased so you can access its command line via:
+```bash
+docker exec -it processes-stamp-app /bin/bash
+```
+
+From there you can run the tests within an isolated environment
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email [opensource@orisintel.com](mailto:opensource@orisintel.com) instead of using the issue tracker.
+If you discover any security related issues, please email @tomschlick or @qschmick directly instead of using the issue tracker.
 
 ## Credits
 

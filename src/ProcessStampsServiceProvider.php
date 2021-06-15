@@ -1,6 +1,6 @@
 <?php
 
-namespace OrisIntel\ProcessStamps;
+namespace AlwaysOpen\ProcessStamps;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;

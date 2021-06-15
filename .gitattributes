@@ -11,3 +11,4 @@
 /tests              export-ignore
 /.editorconfig      export-ignore
 /.github            export-ignore
+/docker            export-ignore
