@@ -1,9 +1,9 @@
 <?php
 
-namespace OrisIntel\ProcessStamps\Tests;
+namespace AlwaysOpen\ProcessStamps\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use OrisIntel\ProcessStamps\ProcessStampsServiceProvider;
+use AlwaysOpen\ProcessStamps\ProcessStampsServiceProvider;
 
 abstract class TestCase extends Orchestra
 {

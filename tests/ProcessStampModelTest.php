@@ -1,9 +1,9 @@
 <?php
 
-namespace OrisIntel\ProcessStamps\Tests;
+namespace AlwaysOpen\ProcessStamps\Tests;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use OrisIntel\ProcessStamps\ProcessStamp;
+use AlwaysOpen\ProcessStamps\ProcessStamp;
 
 class ProcessStampModelTest extends TestCase
 {
