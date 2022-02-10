@@ -11,12 +11,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "laravel/framework": "^8.0"
+        "laravel/framework": "^8.0|^9.0"
     },
     "require-dev": {
-        "doctrine/dbal": "^2.9",
-        "larapack/dd": "^1.0",
-        "mockery/mockery": "~1.0",
+        "doctrine/dbal": "^2.9|^3.0",
         "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "^9.0"
     },
